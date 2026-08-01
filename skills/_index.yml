@@ -1,0 +1,26 @@
+generated: '2026-07-21'
+method: generated
+source: >-
+  Generated from openapi/spaitial-developer-api-openapi.json operationIds and the
+  documented flows at https://docs.spaitial.ai/api/llm-skills and /api/mcp-server.
+  Each skill is grounded in real operationIds (verified against the spec) plus the
+  conventions/errors/idempotency rules. SpAItial also publishes a first-party
+  single-file API skill installable via `npx skills add spaitial-dev/spaitial-api-skill`.
+api: SpAItial Developer API
+provider_published_skill:
+  name: spaitial-dev/spaitial-api-skill
+  install: npx skills add spaitial-dev/spaitial-api-skill
+  source: https://docs.spaitial.ai/api/llm-skills
+skills:
+  - file: spaitial-create-world-from-text.md
+    name: spaitial-create-world-from-text
+    flow: text prompt -> world -> splat download
+  - file: spaitial-create-world-from-image.md
+    name: spaitial-create-world-from-image
+    flow: upload image -> world -> splat download
+  - file: spaitial-edit-panorama-loop.md
+    name: spaitial-edit-panorama-loop
+    flow: edit panorama -> iterate -> world from panorama_id
+  - file: spaitial-export-mesh.md
+    name: spaitial-export-mesh
+    flow: completed world -> start mesh export -> download

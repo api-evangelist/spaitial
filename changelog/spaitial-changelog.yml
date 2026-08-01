@@ -1,0 +1,43 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.spaitial.ai/overview/release-notes, https://spaitial.ai/blog/echo-2-release
+docs: https://docs.spaitial.ai/overview/release-notes
+description: >-
+  Structured capture of SpAItial's dated product release notes. The notes are
+  organized by month and cover the platform (app + generation pipeline); the
+  Developer API surface (worlds/panoramas/files/exports) tracks these platform
+  capabilities. Recent window only; the live release-notes page is the source
+  of truth.
+scheme: month-dated release notes
+current_model: Echo 2
+entries:
+  - date: '2026-05'
+    highlights:
+      - Generate worlds directly from 360-degree panorama images
+      - Automatic image cleanup corrects common upload issues before generation
+      - Reservable usernames and public profile pages
+      - Additional splat download formats, including PLY
+      - Community gallery for sharing public worlds
+    improvements:
+      - Smarter content moderation with fewer false positives
+      - Filter the community gallery by input type and creator
+  - date: '2026-04'
+    highlights:
+      - Higher-quality world generation with improved visual fidelity
+      - Upgraded in-browser viewer; sharper detail and smoother rendering on large scenes
+      - Cinematic recorder exports smooth MP4 videos of a world
+      - Redesigned create-world flow with an image-first composer
+    improvements:
+      - Generation progress now includes a remaining-time estimate
+      - Faster gallery and worlds-list loading
+  - date: '2026-03'
+    highlights:
+      - Auto camera with multiple cinematic modes and smooth transitions
+      - Short clip recording with MP4 export and resolution presets
+      - Persistent image-edit history with versioning
+    improvements:
+      - Faster world loading with on-device caching
+coming_soon:
+  - Additional export formats including USDZ and Collision Mesh
+  - Collaboration features
+  - Advanced editing capabilities

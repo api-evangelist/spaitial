@@ -1,0 +1,42 @@
+generated: '2026-07-21'
+method: derived
+source: >-
+  Derived from openapi/spaitial-developer-api-openapi.json (request/response
+  schemas, path parameters, id-reference fields) and the object shapes in
+  https://docs.spaitial.ai/api/llm-skills (result envelope, panorama edit
+  response, file object, models). Captures the core entity-relationship graph
+  behind the SpAItial world-generation domain.
+docs: https://docs.spaitial.ai/api/llm-skills
+notation: >-
+  relationships use has_one / has_many / belongs_to with the reference field
+  name; direction is from the entity that owns the reference.
+entities:
+  - {name: Request, id_prefix: req_, domain: worlds, description: A world-generation job/operation (submit-then-poll). Terminal states COMPLETED/FAILED/CANCELLED.}
+  - {name: World, id_prefix: '', id_format: uuid, domain: worlds, description: The generated artifact (Gaussian splat + panorama + thumbnail + viewer). world.id is a raw UUID.}
+  - {name: Panorama, id_prefix: pano_, domain: panoramas, description: An edited equirectangular panorama artifact produced by POST /v1/panoramas/edit; 24-hour TTL.}
+  - {name: File, id_prefix: file_, domain: files, description: An uploaded input image (JPEG/PNG/WebP/GIF); 24-hour TTL; status available/consumed/expired.}
+  - {name: Export, id_key: type, domain: worlds, description: An optional derived artifact of a completed world, keyed by type (mesh, mesh-simplified).}
+  - {name: Model, id_key: id, domain: models, description: A world-generation model (e.g. default, experimental / Echo 2 - Standard, Echo 2 HQ).}
+  - {name: WebhookDelivery, id_prefix: wd_, domain: webhooks, description: A callback delivery on a terminal world/export event; dedupe on delivery_id.}
+relationships:
+  - {from: Request, to: World, kind: has_one, via: world}
+  - {from: Request, to: Export, kind: has_many, via: requestId}
+  - {from: Request, to: WebhookDelivery, kind: has_many, via: request_id}
+  - {from: World, to: Request, kind: belongs_to, via: request_id}
+  - {from: Request, to: File, kind: belongs_to, via: 'input.file_id (when input.type=file_id)'}
+  - {from: Request, to: Panorama, kind: belongs_to, via: 'input.panorama_id (when input.type=panorama_id)'}
+  - {from: Panorama, to: Request, kind: belongs_to, via: source_request_id}
+  - {from: Panorama, to: World, kind: belongs_to, via: source_world_id}
+  - {from: Panorama, to: Panorama, kind: belongs_to, via: parent_panorama_id}
+  - {from: Request, to: Model, kind: belongs_to, via: model}
+id_prefixes:
+  req_: world-generation request
+  file_: uploaded file
+  pano_: edited panorama
+  wd_: webhook delivery
+  uuid: world id (world.id) and world_id source references
+input_types:
+  world_create: [text, url, base64, file_id, panorama_id, multi_pano]
+  panorama_edit_source: [request_id, world_id, panorama_id]
+  export_types: [mesh, mesh-simplified]
+  output_formats: [spz, sog]

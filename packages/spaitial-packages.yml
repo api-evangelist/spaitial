@@ -1,0 +1,46 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.spaitial.ai/api/getting-started, https://docs.spaitial.ai/api/llm-skills, https://docs.spaitial.ai/api/mcp-server, https://github.com/spaitial-ai (official GitHub org, verified)
+description: >-
+  SpAItial does not publish a conventional first-party client SDK (no npm/PyPI/
+  Maven/etc. client library was found at search time). Integration is via the
+  raw REST API, the hosted MCP server, or a first-party installable Agent Skill
+  distributed through the skills registry. The only third-party helper the docs
+  reference is mcp-remote (a generic stdio-to-remote MCP bridge). official:true
+  is set only for the SpAItial-owned skill package.
+packages:
+  - language: agent-skill
+    registry: skills
+    name: spaitial-dev/spaitial-api-skill
+    kind: agent-skill
+    install: npx skills add spaitial-dev/spaitial-api-skill
+    url: https://docs.spaitial.ai/api/llm-skills
+    official: true
+    note: >-
+      First-party packaged Agent Skill giving AI coding assistants the full
+      SpAItial API reference, auth rules, endpoint schemas, webhooks, errors,
+      and rate limits locally.
+  - language: agent-plugin
+    registry: github
+    name: spaitial-ai/spaitial-ai-plugin
+    kind: claude-plugin
+    install: git clone https://github.com/spaitial-ai/spaitial-ai-plugin
+    url: https://github.com/spaitial-ai/spaitial-ai-plugin
+    official: true
+    note: >-
+      First-party Claude plugin (official spaitial-ai GitHub org) that generates,
+      manages, and exports explorable 3D Gaussian-splat worlds via the hosted
+      SpAItial MCP server. Distributes the MCP integration; not a REST client SDK.
+  - language: javascript
+    registry: npm
+    name: mcp-remote
+    kind: mcp-bridge
+    install: npx mcp-remote https://mcp.spaitial.ai/mcp --header "X-Spaitial-Api-Key:${SPAITIAL_API_KEY}"
+    url: https://www.npmjs.com/package/mcp-remote
+    official: false
+    note: Third-party generic bridge referenced by SpAItial docs for stdio-only MCP clients (e.g. Claude Desktop).
+no_client_sdk: true
+alternatives:
+  rest_api: https://api.spaitial.ai/v1
+  openapi_spec: https://api.spaitial.ai/v1/openapi.json
+  mcp_server: https://mcp.spaitial.ai/mcp

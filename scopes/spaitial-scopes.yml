@@ -1,0 +1,45 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.spaitial.ai/api/llm-skills (required-scopes-per-endpoint table), https://docs.spaitial.ai/api/authentication
+docs: https://docs.spaitial.ai/api/llm-skills
+description: >-
+  SpAItial API keys carry an explicit scope set enforced server-side; calls
+  outside the granted scopes return 403 FORBIDDEN. Scopes are attached to the
+  bearer API key (not obtained via an OAuth 2.0 authorization-code flow), and
+  the same scopes apply to the hosted MCP server. This is the documented
+  scope-to-endpoint mapping, captured verbatim.
+scheme: api-key-scopes
+scopes:
+  - name: worlds:create
+    description: Create world-generation jobs and edit panoramas.
+    endpoints:
+      - POST /v1/worlds
+      - POST /v1/panoramas/edit
+  - name: worlds:read
+    description: Read worlds, statuses, results, exports, download artifacts, list panoramas, and list models.
+    endpoints:
+      - GET /v1/worlds/requests
+      - GET /v1/worlds/requests/:id
+      - GET /v1/worlds/requests/:id/status
+      - GET /v1/worlds/requests/:id/splat
+      - GET /v1/worlds/requests/:id/panorama
+      - GET /v1/worlds/requests/:id/exports
+      - GET /v1/worlds/requests/:id/exports/:type
+      - GET /v1/panoramas
+      - GET /v1/panoramas/:id
+      - GET /v1/panoramas/:id/download
+      - GET /v1/models
+  - name: worlds:write
+    description: Mutate existing worlds — update title/visibility, cancel jobs, start exports.
+    endpoints:
+      - PATCH /v1/worlds/requests/:id
+      - POST /v1/worlds/requests/:id/cancel
+      - POST /v1/worlds/requests/:id/exports/:type
+  - name: files:create
+    description: Upload input image files for later use in world generation.
+    endpoints:
+      - POST /v1/files
+  - name: files:read
+    description: List files uploaded by this API key.
+    endpoints:
+      - GET /v1/files

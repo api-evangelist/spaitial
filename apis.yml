@@ -1,22 +1,182 @@
 aid: spaitial
-name: Spaitial
-description: Spaitial is a company surfaced as a portfolio company of speedinvest and added to the API
-  Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+name: SpAItial
+description: >-
+  SpAItial (SpAItial Ltd, London) is a frontier spatial-AI lab building Echo, a
+  world-model family that turns text prompts, images, and 360-degree panoramas
+  into persistent, explorable 3D Gaussian Splat worlds (SPZ/SOG, plus mesh
+  exports). SpAItial ships a public REST Developer API at api.spaitial.ai for
+  programmatic world generation, panorama editing, file upload, and mesh export,
+  an official hosted Model Context Protocol (MCP) server for AI agents, and an
+  installable Agent Skill for coding assistants. It is a portfolio company of
+  Speedinvest. This profile was enriched from the live OpenAPI spec, docs,
+  llms.txt, and MCP server card.
 url: https://raw.githubusercontent.com/api-evangelist/spaitial/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://spaitial.ai/og-image-default.png
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - speedinvest
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: active
+x-tier-reason: live-developer-api
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
 - Company
-apis: []
+- Spatial AI
+- World Models
+- 3D
+- Gaussian Splatting
+- Generative AI
+- Developer API
+- MCP
+apis:
+- aid: spaitial:spaitial-files-api
+  name: SpAItial files API
+  description: File upload endpoints
+  humanURL: https://docs.spaitial.ai/api/getting-started
+  baseURL: https://api.spaitial.ai
+  tags:
+  - files
+  properties:
+  - type: OpenAPI
+    url: openapi/spaitial-files-api-openapi.yml
+  - type: Documentation
+    url: https://docs.spaitial.ai/api/getting-started
+  - type: APIReference
+    url: https://docs.spaitial.ai/api/reference/spaitial-developer-api
+  - type: GettingStarted
+    url: https://docs.spaitial.ai/api/getting-started
+- aid: spaitial:spaitial-models-api
+  name: SpAItial models API
+  description: Model discovery endpoints
+  humanURL: https://docs.spaitial.ai/api/getting-started
+  baseURL: https://api.spaitial.ai
+  tags:
+  - models
+  properties:
+  - type: OpenAPI
+    url: openapi/spaitial-models-api-openapi.yml
+  - type: Documentation
+    url: https://docs.spaitial.ai/api/getting-started
+  - type: APIReference
+    url: https://docs.spaitial.ai/api/reference/spaitial-developer-api
+  - type: GettingStarted
+    url: https://docs.spaitial.ai/api/getting-started
+- aid: spaitial:spaitial-panoramas-api
+  name: SpAItial panoramas API
+  description: The panoramas API from SpAItial — 4 operation(s) for panoramas.
+  humanURL: https://docs.spaitial.ai/api/getting-started
+  baseURL: https://api.spaitial.ai
+  tags:
+  - panoramas
+  properties:
+  - type: OpenAPI
+    url: openapi/spaitial-panoramas-api-openapi.yml
+  - type: Documentation
+    url: https://docs.spaitial.ai/api/getting-started
+  - type: APIReference
+    url: https://docs.spaitial.ai/api/reference/spaitial-developer-api
+  - type: GettingStarted
+    url: https://docs.spaitial.ai/api/getting-started
+- aid: spaitial:spaitial-worlds-api
+  name: SpAItial worlds API
+  description: World generation endpoints
+  humanURL: https://docs.spaitial.ai/api/getting-started
+  baseURL: https://api.spaitial.ai
+  tags:
+  - worlds
+  properties:
+  - type: OpenAPI
+    url: openapi/spaitial-worlds-api-openapi.yml
+  - type: Documentation
+    url: https://docs.spaitial.ai/api/getting-started
+  - type: APIReference
+    url: https://docs.spaitial.ai/api/reference/spaitial-developer-api
+  - type: GettingStarted
+    url: https://docs.spaitial.ai/api/getting-started
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+common:
+- type: AgenticAccess
+  url: agentic-access/spaitial-agentic-access.yml
+- type: DomainSecurity
+  url: security/spaitial-domain-security.yml
+- type: Authentication
+  url: authentication/spaitial-authentication.yml
+- type: OAuthScopes
+  url: scopes/spaitial-scopes.yml
+- type: Conventions
+  url: conventions/spaitial-conventions.yml
+- type: Idempotency
+  url: conventions/spaitial-conventions.yml
+- type: ErrorCatalog
+  url: errors/spaitial-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/spaitial-lifecycle.yml
+- type: ChangeLog
+  url: changelog/spaitial-changelog.yml
+- type: Sandbox
+  url: sandbox/spaitial-sandbox.yml
+- type: DataModel
+  url: data-model/spaitial-data-model.yml
+- type: Conformance
+  url: conformance/spaitial-conformance.yml
+- type: Packages
+  url: packages/spaitial-packages.yml
+- type: WellKnown
+  url: well-known/spaitial-well-known.yml
+- type: LLMsTxt
+  url: llms/spaitial-llms.txt
+- type: AsyncAPI
+  url: asyncapi/spaitial-webhooks-asyncapi.yml
+- type: Webhooks
+  url: asyncapi/spaitial-webhooks-asyncapi.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: MCPServer
+  url: https://mcp.spaitial.ai/mcp
+  name: SpAItial MCP Server
+  description: Official hosted, remote streamable-HTTP MCP server; 15 tools mapping 1:1 to the Developer API, BYOK (bearer or oauth2). Detail in mcp/spaitial-mcp.yml.
+- type: DeveloperPortal
+  url: https://developers.spaitial.ai
+- type: Documentation
+  url: https://docs.spaitial.ai
+- type: APIReference
+  url: https://docs.spaitial.ai/api/reference/spaitial-developer-api
+- type: GettingStarted
+  url: https://docs.spaitial.ai/api/getting-started
+- type: Pricing
+  url: https://docs.spaitial.ai/api/credits-billing
+- type: Blog
+  url: https://spaitial.ai/blog
+- type: SignUp
+  url: https://developers.spaitial.ai
+- type: TermsOfService
+  url: https://spaitial.ai/terms
+- type: PrivacyPolicy
+  url: https://spaitial.ai/privacy
+- type: GitHubOrganization
+  url: https://github.com/spaitial-ai
+- type: Roadmap
+  url: https://docs.spaitial.ai/overview/release-notes
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 27
+  pass: local-v1

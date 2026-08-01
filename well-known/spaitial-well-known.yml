@@ -1,0 +1,53 @@
+generated: '2026-07-21'
+method: searched
+description: >-
+  Results of probing the /.well-known/ discovery surface for the SpAItial base
+  hosts (apis.yml baseURL + OpenAPI servers[] = https://api.spaitial.ai) plus the
+  hosted MCP server host. Status is the HTTP code observed at fetch time. Only
+  documents that returned a real, correctly-typed payload were saved verbatim.
+  The MCP server publishes an MCP Server Card (both the versioned path and the
+  compatibility alias) — both saved. No security.txt, OpenID, or OAuth
+  authorization-server metadata is published on the API host.
+hosts:
+  - host: https://api.spaitial.ai
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /v1/openapi.json
+        status: 200
+        type: application/json
+        note: Machine-readable OpenAPI 3.0 spec — saved as openapi/spaitial-developer-api-openapi.json
+  - host: https://mcp.spaitial.ai
+    documents:
+      - path: /.well-known/mcp/server-card.json
+        status: 200
+        type: application/json
+        file: spaitial-mcp-server-card.json
+      - path: /.well-known/mcp.json
+        status: 200
+        type: application/json
+        file: spaitial-mcp.json
+  - host: https://spaitial.ai
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /llms.txt
+        status: 200
+        type: text/plain
+        note: Saved as llms/spaitial-llms.txt
+  - host: https://docs.spaitial.ai
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /llms.txt
+        status: 200
+        type: text/plain
+        note: Saved as llms/spaitial-docs-llms.txt

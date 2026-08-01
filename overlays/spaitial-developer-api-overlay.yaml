@@ -1,0 +1,46 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the SpAItial Developer API
+  version: 1.0.0
+extends: ../openapi/spaitial-developer-api-openapi.json
+actions:
+  - target: $.info
+    description: Add API Evangelist provenance and cross-links to companion artifacts.
+    update:
+      x-apievangelist:
+        enriched: '2026-07-21'
+        source: https://api.spaitial.ai/v1/openapi.json
+        conventions: conventions/spaitial-conventions.yml
+        errors: errors/spaitial-problem-types.yml
+        authentication: authentication/spaitial-authentication.yml
+        scopes: scopes/spaitial-scopes.yml
+        webhooks: asyncapi/spaitial-webhooks-asyncapi.yml
+        mcp_server: https://mcp.spaitial.ai/mcp
+  - target: $.tags
+    description: The spec omits the `panoramas` tag even though panorama operations reference it. Add it.
+    update:
+      - name: panoramas
+        description: Panorama editing and retrieval endpoints.
+  - target: $.paths['/v1/worlds'].post
+    description: Flag the world-create operation as idempotent via the documented Idempotency-Key header.
+    update:
+      x-idempotent: true
+      x-idempotency-header: Idempotency-Key
+      x-scope: worlds:create
+      x-async: submit-then-poll (202 -> poll GET /v1/worlds/requests/{id}/status)
+  - target: $.paths['/v1/panoramas/edit'].post
+    description: Flag panorama edit as idempotent and synchronous.
+    update:
+      x-idempotent: true
+      x-idempotency-header: Idempotency-Key
+      x-scope: worlds:create
+      x-sync: true
+  - target: $.paths['/v1/files'].post
+    description: Note the required scope for file upload.
+    update:
+      x-scope: files:create
+  - target: $.components.securitySchemes.api-key
+    description: Document the key prefixes and the MCP BYOK header alias.
+    update:
+      x-key-prefixes: [spt_live_, spt_test_]
+      x-mcp-header: X-Spaitial-Api-Key

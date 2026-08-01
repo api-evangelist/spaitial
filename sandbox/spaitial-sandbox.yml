@@ -1,0 +1,42 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.spaitial.ai/api/authentication, https://docs.spaitial.ai/api/llm-skills
+description: >-
+  SpAItial's test-vs-live surface. The Developer API separates test and live
+  usage by API-key prefix. Test keys carry the same scopes as live keys but run
+  under lower rate limits. SpAItial is not a payments API, so there are no test
+  cards or magic monetary values; "sandbox" here means test API keys plus the
+  validation and moderation controls that let you exercise the pipeline safely.
+  Only published values are recorded — no test values were invented.
+modes:
+  - name: live
+    key_prefix: spt_live_
+    notes: Production keys. Spend real plan credits on world generation.
+  - name: test
+    key_prefix: spt_test_
+    notes: >-
+      Test/sandbox keys (when enabled for a workspace). Same scopes as live keys
+      with lower rate limits. The prefix is part of the key and must be sent
+      verbatim.
+key_formats:
+  live: spt_live_<32-char-base32>
+  test: spt_test_<...>
+free_starter:
+  credits: 1600 once
+  note: One-time free starter balance (10 Echo 2 - Standard or 2 Echo 2 HQ generations). Free plan does not work with the API; API generation requires plan credit.
+safe_exercise_controls:
+  - name: validation (advisory mode)
+    mechanism: 'POST /v1/worlds with validation: { skip: false, error_on_fail: false }'
+    effect: Returns suitability warnings (validation.issues[]) without blocking generation.
+  - name: validation (strict mode)
+    mechanism: 'validation: { skip: false, error_on_fail: true }'
+    effect: Rejects unsuitable images with 422 VALIDATION_FAILED before the job starts.
+  - name: models discovery
+    mechanism: GET /v1/models
+    effect: Confirm auth is wired correctly without spending generation credits (reads are not charged).
+  - name: idempotency replay
+    mechanism: Reuse an Idempotency-Key on POST /v1/worlds to safely retry without double-charging.
+notes:
+  - Reads, status polling, downloads, and exports do not consume generation credits.
+  - Moderation always runs on API inputs, in both test and live mode.
+docs: https://docs.spaitial.ai/api/authentication

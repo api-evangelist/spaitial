@@ -1,0 +1,43 @@
+generated: '2026-07-21'
+method: derived
+source: >-
+  Derived from openapi/spaitial-developer-api-openapi.json (securitySchemes,
+  error responses, pagination + idempotency parameters), the MCP server card
+  (well-known/spaitial-mcp-server-card.json), and SpAItial docs
+  (/api/authentication, /errors, /rate-limits, /llm-skills, /moderation).
+  Each entry asserts whether the API conforms to a cross-cutting standard, with
+  evidence. Absence of a claim is recorded as conforms:false.
+standards:
+  - id: http-bearer-auth
+    conforms: true
+    evidence: OpenAPI securityScheme api-key is http/bearer (API key); every operation requires it.
+  - id: oauth2
+    conforms: partial
+    evidence: >-
+      The hosted MCP server card advertises oauth2 as an accepted auth scheme
+      (alongside bearer). The REST API itself authenticates with a bearer API
+      key, not an OAuth 2.0 authorization-code flow.
+  - id: oidc
+    conforms: false
+    evidence: No /.well-known/openid-configuration on api.spaitial.ai (404); no OIDC discovery.
+  - id: rfc9457-problem-json
+    conforms: false
+    evidence: Errors use a custom {"error":{"code","message","request_id","details"}} envelope, not application/problem+json.
+  - id: idempotency
+    conforms: true
+    evidence: Idempotency-Key request header on POST /v1/worlds and POST /v1/panoramas/edit; 24h retention; 409 IDEMPOTENCY_KEY_REUSED on conflict.
+  - id: pagination
+    conforms: true
+    evidence: GET /v1/files uses offset/limit query params and returns has_more.
+  - id: rate-limit-headers
+    conforms: true
+    evidence: Responses carry X-RateLimit-Limit / -Remaining / -Reset; 429 responses carry Retry-After.
+  - id: webhooks-hmac
+    conforms: true
+    evidence: Webhook deliveries carry X-Spaitial-Signature (sha256=HMAC-SHA256 over the raw body with the endpoint secret); dedupe on X-Spaitial-Delivery-ID.
+  - id: mcp
+    conforms: true
+    evidence: Official hosted MCP server (streamable-http) at mcp.spaitial.ai/mcp with a published MCP Server Card; 15 tools mapping 1:1 to the REST API.
+  - id: content-moderation
+    conforms: true
+    evidence: NSFW moderation gate runs on all API inputs before generation; documented at docs.spaitial.ai/api/moderation.

@@ -1,0 +1,114 @@
+generated: '2026-07-21'
+method: searched
+source: >-
+  https://docs.spaitial.ai/api/getting-started, /authentication, /errors,
+  /rate-limits, /llm-skills, /validation, /moderation, and the OpenAPI spec at
+  https://api.spaitial.ai/v1/openapi.json — the cross-cutting request/response
+  conventions that apply to every SpAItial Developer API endpoint.
+description: >-
+  How the SpAItial Developer API behaves across every operation: authentication
+  style, idempotency, pagination, request tracing, versioning, async job
+  lifecycle, error envelope, rate-limit signaling, webhooks, and ID conventions.
+  These are the developer-experience / runtime-semantics conventions that the
+  OpenAPI document does not fully express.
+
+base_url: https://api.spaitial.ai
+api_style: REST over HTTPS, JSON request/response (multipart/form-data for file upload)
+versioning:
+  scheme: URI path versioning
+  current: v1
+  mechanism: All endpoints are namespaced under /v1; no version header.
+  detail: lifecycle/spaitial-lifecycle.yml
+
+authentication:
+  scheme: Bearer token (API key)
+  header: 'Authorization: Bearer spt_live_...'
+  key_prefixes: [spt_live_, spt_test_]
+  scopes: [worlds:create, worlds:read, worlds:write, files:create, files:read]
+  docs: https://docs.spaitial.ai/api/authentication
+  detail: authentication/spaitial-authentication.yml
+
+idempotency:
+  supported: true
+  mechanism: Idempotency-Key request header
+  applies_to: Mutating POST endpoints — POST /v1/worlds and POST /v1/panoramas/edit.
+  key_format: Client-generated unique value (e.g. a UUID v4).
+  retention: Keys are honored for up to 24 hours.
+  conflict_behavior: >-
+    Same key + same body returns the cached 202/200 response (no new job).
+    Same key + different body returns 409 IDEMPOTENCY_KEY_REUSED. Keys are not
+    retry tokens — retrying a FAILED job requires a fresh key (or no key).
+  docs: https://docs.spaitial.ai/api/llm-skills#idempotency
+
+pagination:
+  style: offset/limit
+  applies_to: GET /v1/files (and list endpoints for worlds/panoramas)
+  request_params:
+    offset: integer >= 0, default 0 — number of records to skip
+    limit: integer 1-100, default 20 — max records to return
+  response_fields:
+    files/data: array of results
+    limit: echoed page size
+    offset: echoed offset
+    has_more: boolean — whether more results exist
+  docs: https://docs.spaitial.ai/api/files
+
+async_jobs:
+  model: Submit-then-poll (or webhook) for world generation.
+  submit: POST /v1/worlds returns 202 with request_id and status PENDING.
+  statuses: [PENDING, PROCESSING, COMPLETED, FAILED, CANCELLED]
+  progress: float 0-1 (coarse, reflects pipeline stage)
+  poll: GET /v1/worlds/requests/:id/status (cheap, cached ~3s)
+  result: GET /v1/worlds/requests/:id — available once COMPLETED
+  typical_duration: 5-10 minutes (Echo 2 - Standard); ~60 minutes (Echo 2 HQ)
+  cancel: POST /v1/worlds/requests/:id/cancel (best-effort)
+
+downloads:
+  mechanism: Stable API endpoints (splat_url, panorama_url, export download_url) return 302 to a short-lived (~5 min) signed URL.
+  note: Store the stable API URL; re-hit for a fresh redirect. Artifacts served from a private bucket; auth required on every download.
+
+request_tracing:
+  error_field: error.request_id (trace id returned in the error envelope)
+  webhook_header: X-Spaitial-Request-ID
+  description: Errors carry an optional request_id; webhook deliveries carry X-Spaitial-Request-ID and X-Spaitial-Delivery-ID.
+
+error_envelope:
+  media_type: application/json
+  rfc9457: false
+  shape: '{ "error": { "code": string, "message": string, "request_id"?: string, "details"?: object } }'
+  guidance: Branch on the stable error.code, never the human-readable message.
+  detail: errors/spaitial-problem-types.yml
+  docs: https://docs.spaitial.ai/api/errors
+
+rate_limits:
+  signal_status: 429
+  headers: [X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, Retry-After]
+  style: per-key fixed-window counters with per-route buckets
+  buckets:
+    - {name: v1-world-create, routes: 'POST /v1/worlds', limit: 10/min}
+    - {name: v1-status, routes: 'GET /.../status', limit: 300/min}
+    - {name: v1-download, routes: 'GET /.../splat, /.../panorama', limit: 120/min}
+    - {name: v1-files, routes: 'POST /v1/files', limit: 20/min}
+    - {name: v1-default, routes: 'POST /v1/panoramas/edit, GET /v1/panoramas..., everything else', limit: 120/min}
+  docs: https://docs.spaitial.ai/api/rate-limits
+
+webhooks:
+  signing_header: X-Spaitial-Signature
+  verification: sha256=HMAC-SHA256(rawBody, webhook_secret)
+  delivery_headers: [X-Spaitial-Event, X-Spaitial-Request-ID, X-Spaitial-Delivery-ID, X-Spaitial-Delivery-Attempt]
+  dedupe: Idempotent on X-Spaitial-Delivery-ID (a delivery may arrive twice).
+  retries: Up to 5 with backoff (~10s / 60s / 600s) on non-2xx or timeout; 30s timeout per attempt; HTTPS only (SSRF-guarded).
+  detail: asyncapi/spaitial-webhooks-asyncapi.yml
+  docs: https://docs.spaitial.ai/api/llm-skills#webhooks
+
+other_conventions:
+  - name: ID prefixes
+    detail: Opaque IDs carry type prefixes — req_ (request), file_ (upload), pano_ (edited panorama), wd_ (webhook delivery). World IDs are raw UUIDs (world.id).
+  - name: Timestamps
+    detail: ISO-8601 UTC; completed_at is null until a job reaches a terminal state.
+  - name: request vs world
+    detail: The request is the operation (req_...); the world is the artifact (uuid). They have different IDs.
+  - name: Validation vs Moderation
+    detail: validation is an advisory image-suitability check (opt-in via validation.skip=false); moderation is a mandatory safety gate that always runs on API inputs.
+  - name: Test vs live keys
+    detail: Separated by key prefix (spt_test_ / spt_live_); see sandbox/spaitial-sandbox.yml.

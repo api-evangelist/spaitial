@@ -1,0 +1,113 @@
+generated: '2026-07-21'
+method: searched
+format: spaitial-error-object
+source: >-
+  https://docs.spaitial.ai/api/errors and https://docs.spaitial.ai/api/llm-skills
+  (stable error-code table), cross-checked against the 4xx/5xx responses in
+  openapi/spaitial-developer-api-openapi.json. SpAItial does NOT use RFC 9457
+  application/problem+json; every error is returned as
+  {"error": {"code", "message", "request_id"?, "details"?}}.
+envelope:
+  media_type: application/json
+  rfc9457: false
+  shape: '{ "error": { "code": string, "message": string, "request_id"?: string, "details"?: object } }'
+  guidance: Always branch on the stable error.code, not the human-readable message.
+problems:
+  - code: UNAUTHORIZED
+    status: 401
+    title: Unauthorized
+    meaning: Missing, malformed, or revoked API key.
+    remediation: Send a valid Authorization; Bearer spt_live_... header; rotate a leaked key from the developer portal.
+  - code: FORBIDDEN
+    status: 403
+    title: Forbidden
+    meaning: Authenticated but the key lacks the required scope for the endpoint.
+    remediation: Grant the endpoint's scope (worlds:create/read/write, files:create/read) to the key.
+  - code: MODERATION_REJECTED
+    status: 403
+    title: Moderation Rejected
+    meaning: Content moderation blocked the input (image bytes, URL/base64 image, text prompt, or edit prompt/reference).
+    remediation: Submit safe content; moderation runs before credits are consumed.
+  - code: MODEL_NOT_FOUND
+    status: 400
+    title: Model Not Found
+    meaning: Unknown model id passed to POST /v1/worlds.
+    remediation: List valid models via GET /v1/models or omit model to use the account default.
+  - code: MODEL_FORBIDDEN
+    status: 403
+    title: Model Forbidden
+    meaning: The requested model is restricted for this account.
+  - code: MODEL_UNAVAILABLE
+    status: 503
+    title: Model Unavailable
+    meaning: Model deployment is unhealthy.
+    remediation: Retry with backoff.
+  - code: INVALID_INPUT
+    status: 400
+    title: Invalid Input
+    meaning: Malformed request — bad JSON, missing required field, wrong content type, or unsupported input.
+    remediation: Fix the request body; not retryable as-is.
+  - code: INSUFFICIENT_CREDITS
+    status: 402
+    title: Insufficient Credits
+    meaning: Account does not have enough eligible plan credit to reserve the generation (free daily credit cannot pay for API usage).
+    remediation: Purchase credits or upgrade the plan in the developer portal, then retry.
+  - code: VALIDATION_FAILED
+    status: 422
+    title: Validation Failed
+    meaning: Image suitability check rejected the input in strict mode (validation.skip=false, error_on_fail=true).
+    remediation: Inspect details.validation.issues and details.fix_options; supply a cleaner image.
+  - code: FILE_NOT_FOUND
+    status: 404
+    title: File Not Found
+    meaning: file_id is unknown or not owned by the caller.
+  - code: FILE_EXPIRED
+    status: 404
+    title: File Expired
+    meaning: file_id is older than its 24-hour TTL or was already consumed.
+  - code: REQUEST_NOT_FOUND
+    status: 404
+    title: Request Not Found
+    meaning: Unknown request_id or not owned by the caller.
+  - code: PANORAMA_NOT_FOUND
+    status: 404
+    title: Panorama Not Found
+    meaning: Unknown panorama_id (pano_...) or not owned by the caller.
+  - code: PANORAMA_EXPIRED
+    status: 410
+    title: Panorama Expired
+    meaning: Edited panorama is past its 24-hour TTL.
+    remediation: Re-run the panorama edit to produce a fresh pano_... artifact.
+  - code: EDIT_FAILED
+    status: 502
+    title: Edit Failed
+    meaning: The upstream panorama edit failed after the request was accepted.
+    remediation: Retry with a fresh or idempotent request.
+  - code: RESOURCE_NOT_READY
+    status: 409
+    title: Resource Not Ready
+    meaning: World/artifact/export is not yet COMPLETED for the requested operation.
+    remediation: Poll status and retry once the job is COMPLETED.
+  - code: IDEMPOTENCY_KEY_REUSED
+    status: 409
+    title: Idempotency Key Reused
+    meaning: The same Idempotency-Key was used with a different request body.
+    remediation: Resolve the collision and pick a new key.
+  - code: RATE_LIMIT_EXCEEDED
+    status: 429
+    title: Rate Limit Exceeded
+    meaning: Per-key rate limit exceeded.
+    remediation: Back off using Retry-After and the X-RateLimit-* headers; add jitter.
+  - code: INTERNAL_ERROR
+    status: 500
+    title: Internal Error
+    meaning: Unexpected server error.
+    remediation: Retry with exponential backoff and an Idempotency-Key on mutating endpoints.
+validation_issue_codes:
+  - {code: extreme_viewpoint, meaning: Camera is straight up/down, heavily tilted, aerial, fisheye, or already equirectangular.}
+  - {code: watermark_or_label, meaning: Text overlays, watermarks, logos, captions, or UI chrome may be baked into the world.}
+  - {code: tight_space, meaning: Too little surrounding scene context for robust extrapolation.}
+  - {code: low_quality, meaning: Blurry, low-resolution, heavily compressed, noisy, or poorly exposed image.}
+  - {code: non_scene, meaning: Portrait, product shot, document, chart, UI screenshot, or other non-environment image.}
+  - {code: people_present, meaning: People are visible; the pipeline prefers empty static scenes.}
+  - {code: other, meaning: The validator found another suitability issue.}

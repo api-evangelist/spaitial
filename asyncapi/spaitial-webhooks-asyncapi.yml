@@ -1,0 +1,154 @@
+asyncapi: 3.0.0
+info:
+  title: SpAItial Developer API Webhooks
+  version: 1.0.0
+  description: >-
+    Webhook event surface for the SpAItial Developer API. Set webhook.url on
+    POST /v1/worlds to receive an HTTPS callback when a world-generation job (or
+    a mesh export) reaches a terminal state. Deliveries are signed with
+    HMAC-SHA256 (X-Spaitial-Signature: sha256=...) using the webhook_secret from
+    the API key's settings, retried up to 5 times with backoff, and are
+    idempotent on X-Spaitial-Delivery-ID. Modeled from
+    https://docs.spaitial.ai/api/llm-skills#webhooks (searched, not fabricated).
+  contact:
+    name: SpAItial
+    url: https://docs.spaitial.ai/api/llm-skills
+defaultContentType: application/json
+servers:
+  consumer:
+    host: your-host.example.com
+    protocol: https
+    description: Your HTTPS endpoint registered via webhook.url on POST /v1/worlds. Private/loopback hosts are rejected (SSRF).
+channels:
+  webhook:
+    address: /
+    description: The consumer HTTPS endpoint that receives SpAItial world/export event deliveries.
+    messages:
+      worldCompleted:
+        $ref: '#/components/messages/worldCompleted'
+      worldFailed:
+        $ref: '#/components/messages/worldFailed'
+      worldCancelled:
+        $ref: '#/components/messages/worldCancelled'
+      exportCompleted:
+        $ref: '#/components/messages/exportCompleted'
+      exportFailed:
+        $ref: '#/components/messages/exportFailed'
+operations:
+  receiveWorldEvent:
+    action: receive
+    channel:
+      $ref: '#/channels/webhook'
+    messages:
+      - $ref: '#/channels/webhook/messages/worldCompleted'
+      - $ref: '#/channels/webhook/messages/worldFailed'
+      - $ref: '#/channels/webhook/messages/worldCancelled'
+      - $ref: '#/channels/webhook/messages/exportCompleted'
+      - $ref: '#/channels/webhook/messages/exportFailed'
+components:
+  messages:
+    worldCompleted:
+      name: world.completed
+      title: World generation completed
+      headers:
+        $ref: '#/components/schemas/deliveryHeaders'
+      payload:
+        $ref: '#/components/schemas/worldEvent'
+    worldFailed:
+      name: world.failed
+      title: World generation failed
+      headers:
+        $ref: '#/components/schemas/deliveryHeaders'
+      payload:
+        $ref: '#/components/schemas/worldFailedEvent'
+    worldCancelled:
+      name: world.cancelled
+      title: World generation cancelled
+      headers:
+        $ref: '#/components/schemas/deliveryHeaders'
+      payload:
+        $ref: '#/components/schemas/worldEvent'
+    exportCompleted:
+      name: world.export.completed
+      title: Mesh export completed
+      headers:
+        $ref: '#/components/schemas/deliveryHeaders'
+      payload:
+        $ref: '#/components/schemas/exportEvent'
+    exportFailed:
+      name: world.export.failed
+      title: Mesh export failed
+      headers:
+        $ref: '#/components/schemas/deliveryHeaders'
+      payload:
+        $ref: '#/components/schemas/exportEvent'
+  schemas:
+    deliveryHeaders:
+      type: object
+      properties:
+        User-Agent:
+          type: string
+          const: SpaitialWebhook/1.0
+        X-Spaitial-Event:
+          type: string
+          enum: [world.completed, world.failed, world.cancelled, world.export.completed, world.export.failed]
+        X-Spaitial-Request-ID:
+          type: string
+          example: req_abc123
+        X-Spaitial-Delivery-ID:
+          type: string
+          example: wd_...
+        X-Spaitial-Delivery-Attempt:
+          type: integer
+          example: 1
+        X-Spaitial-Signature:
+          type: string
+          description: sha256=HMAC-SHA256(rawBody, webhook_secret)
+    worldEvent:
+      type: object
+      properties:
+        event: {type: string, example: world.completed}
+        delivery_id: {type: string, example: wd_uuid}
+        timestamp: {type: string, format: date-time}
+        request_id: {type: string, example: req_...}
+        status: {type: string, enum: [COMPLETED, CANCELLED]}
+        created_at: {type: string, format: date-time}
+        updated_at: {type: string, format: date-time}
+        completed_at: {type: [string, 'null'], format: date-time}
+        validation: {type: object}
+        data:
+          type: [object, 'null']
+          description: Same shape as the `world` object in the GET result envelope; null for cancelled.
+    worldFailedEvent:
+      type: object
+      properties:
+        event: {type: string, const: world.failed}
+        delivery_id: {type: string}
+        timestamp: {type: string, format: date-time}
+        request_id: {type: string}
+        status: {type: string, const: FAILED}
+        data: {type: 'null'}
+        error:
+          type: object
+          properties:
+            code: {type: string}
+            message: {type: string}
+    exportEvent:
+      type: object
+      properties:
+        event: {type: string, enum: [world.export.completed, world.export.failed]}
+        delivery_id: {type: string}
+        timestamp: {type: string, format: date-time}
+        request_id: {type: string}
+        status: {type: string}
+        data: {type: 'null'}
+        export:
+          type: object
+          properties:
+            type: {type: string, enum: [mesh, mesh-simplified]}
+            status: {type: string, enum: [READY, FAILED]}
+            error:
+              type: object
+              properties:
+                code: {type: string}
+                message: {type: string}

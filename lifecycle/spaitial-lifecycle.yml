@@ -1,0 +1,48 @@
+generated: '2026-07-21'
+method: searched
+source: >-
+  https://docs.spaitial.ai/api/getting-started (base URL / v1),
+  https://docs.spaitial.ai/overview/release-notes (dated product release notes),
+  https://spaitial.ai/blog/echo-2-release (model release). No deprecation policy,
+  Sunset/Deprecation headers, numeric SLA, or public status page were found at
+  probe time (status.spaitial.ai does not resolve).
+versioning:
+  scheme: URI path versioning
+  current: v1
+  mechanism: All endpoints namespaced under /v1; no version header.
+  docs: https://docs.spaitial.ai/api/getting-started
+  changelog: changelog/spaitial-changelog.yml
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: >-
+    No formal deprecation policy or RFC 8594 Sunset/Deprecation headers are
+    documented. The API is at v1; short-lived resources (uploaded files, edited
+    panoramas) instead expire on a documented 24-hour TTL rather than via
+    version deprecation.
+ttls:
+  - resource: uploaded file (file_id)
+    ttl: 24 hours
+    note: private bucket; marked consumed once used
+  - resource: edited panorama (pano_id)
+    ttl: 24 hours
+  - resource: signed download URL (splat/panorama/export)
+    ttl: ~5 minutes
+  - resource: idempotency key
+    ttl: 24 hours
+sla:
+  url: null
+  public_uptime_target: null
+  notes: No public numeric uptime SLA published. Higher rate-limit ceilings are available on request; Custom/Enterprise plans cover production/high-volume workloads.
+status_page: null
+models:
+  note: GET /v1/models returns the models available to the calling key (e.g. default, experimental).
+  catalog:
+    - {id: Echo 2 - Standard, typical_time: ~8 min, credits: 160}
+    - {id: Echo 2 (HQ), typical_time: ~60 min, credits: 800}
+roadmap:
+  source: https://docs.spaitial.ai/overview/release-notes (Coming Soon)
+  planned:
+    - Additional export formats including USDZ and Collision Mesh
+    - Collaboration features
+    - Advanced editing capabilities
