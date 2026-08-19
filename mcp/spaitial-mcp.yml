@@ -2,14 +2,11 @@ generated: '2026-07-21'
 method: searched
 status: published
 source: https://docs.spaitial.ai/api/mcp-server, https://mcp.spaitial.ai/.well-known/mcp/server-card.json
-description: >-
-  SpAItial operates an official hosted, remote Model Context Protocol (MCP)
-  server at https://mcp.spaitial.ai/mcp. It is a stateless, streamable-HTTP
-  server whose tools map 1:1 onto the SpAItial Developer REST API, so an agent
-  can prompt, generate, poll, and download a 3D Gaussian splat or mesh on its
-  own. Bring-your-own-key (BYOK): the server holds no credentials; each request
-  carries the caller's SpAItial API key and generations are billed to that
-  account. Tool list and endpoint mapping captured verbatim from the docs.
+description: 'SpAItial operates an official hosted, remote Model Context Protocol (MCP) server at https://mcp.spaitial.ai/mcp.
+  It is a stateless, streamable-HTTP server whose tools map 1:1 onto the SpAItial Developer REST API,
+  so an agent can prompt, generate, poll, and download a 3D Gaussian splat or mesh on its own. Bring-your-own-key
+  (BYOK): the server holds no credentials; each request carries the caller''s SpAItial API key and generations
+  are billed to that account. Tool list and endpoint mapping captured verbatim from the docs.'
 server:
   name: spaitial-mcp
   title: SpAItial MCP Server
@@ -19,8 +16,8 @@ server:
   protocol_version: '2025-06-18'
   auth: bearer or oauth2 (BYOK)
   auth_headers:
-    - 'X-Spaitial-Api-Key: spt_live_...'
-    - 'Authorization: Bearer spt_live_...'
+  - 'X-Spaitial-Api-Key: spt_live_...'
+  - 'Authorization: Bearer spt_live_...'
   server_card: well-known/spaitial-mcp-server-card.json
   server_card_url: https://mcp.spaitial.ai/.well-known/mcp/server-card.json
   server_card_alias: https://mcp.spaitial.ai/.well-known/mcp.json
@@ -30,42 +27,53 @@ server:
     prompts: false
   documentation: https://docs.spaitial.ai/api/mcp-server
 install:
-  claude_code: 'claude mcp add --transport http spaitial https://mcp.spaitial.ai/mcp --header "X-Spaitial-Api-Key: spt_live_YOUR_KEY"'
-  vscode: 'code --add-mcp ''{"name":"spaitial","type":"http","url":"https://mcp.spaitial.ai/mcp","headers":{"X-Spaitial-Api-Key":"spt_live_YOUR_KEY"}}'''
-  claude_desktop: 'bridge via npx mcp-remote https://mcp.spaitial.ai/mcp --header "X-Spaitial-Api-Key:${SPAITIAL_API_KEY}"'
+  claude_code: 'claude mcp add --transport http spaitial https://mcp.spaitial.ai/mcp --header "X-Spaitial-Api-Key:
+    spt_live_YOUR_KEY"'
+  vscode: code --add-mcp '{"name":"spaitial","type":"http","url":"https://mcp.spaitial.ai/mcp","headers":{"X-Spaitial-Api-Key":"spt_live_YOUR_KEY"}}'
+  claude_desktop: bridge via npx mcp-remote https://mcp.spaitial.ai/mcp --header "X-Spaitial-Api-Key:${SPAITIAL_API_KEY}"
 tools:
-  - name: list_models
-    maps_to: GET /v1/models
-  - name: create_world
-    maps_to: POST /v1/worlds
-    description: text / image URL / base64 / file_id / panorama_id input, is_pano, output_format, visibility, webhook, idempotency
-  - name: edit_panorama
-    maps_to: POST /v1/panoramas/edit
-  - name: list_panoramas
-    maps_to: GET /v1/panoramas
-  - name: get_panorama
-    maps_to: GET /v1/panoramas/:id
-  - name: get_edited_panorama_download_url
-    maps_to: GET /v1/panoramas/:id/download
-  - name: get_world_status
-    maps_to: GET /v1/worlds/requests/:id/status
-  - name: get_world
-    maps_to: GET /v1/worlds/requests/:id
-  - name: list_world_requests
-    maps_to: GET /v1/worlds/requests
-  - name: get_splat_download_url
-    maps_to: GET /v1/worlds/requests/:id/splat
-  - name: get_panorama_download_url
-    maps_to: GET /v1/worlds/requests/:id/panorama
-  - name: update_world
-    maps_to: PATCH /v1/worlds/requests/:id
-  - name: cancel_world
-    maps_to: POST /v1/worlds/requests/:id/cancel
-  - name: start_mesh_export
-    maps_to: POST /v1/worlds/requests/:id/exports/:type
-  - name: get_mesh_export
-    maps_to: GET /v1/worlds/requests/:id/exports/:type
+- name: list_models
+  maps_to: GET /v1/models
+- name: create_world
+  maps_to: POST /v1/worlds
+  description: text / image URL / base64 / file_id / panorama_id input, is_pano, output_format, visibility,
+    webhook, idempotency
+- name: edit_panorama
+  maps_to: POST /v1/panoramas/edit
+- name: list_panoramas
+  maps_to: GET /v1/panoramas
+- name: get_panorama
+  maps_to: GET /v1/panoramas/:id
+- name: get_edited_panorama_download_url
+  maps_to: GET /v1/panoramas/:id/download
+- name: get_world_status
+  maps_to: GET /v1/worlds/requests/:id/status
+- name: get_world
+  maps_to: GET /v1/worlds/requests/:id
+- name: list_world_requests
+  maps_to: GET /v1/worlds/requests
+- name: get_splat_download_url
+  maps_to: GET /v1/worlds/requests/:id/splat
+- name: get_panorama_download_url
+  maps_to: GET /v1/worlds/requests/:id/panorama
+- name: update_world
+  maps_to: PATCH /v1/worlds/requests/:id
+- name: cancel_world
+  maps_to: POST /v1/worlds/requests/:id/cancel
+- name: start_mesh_export
+  maps_to: POST /v1/worlds/requests/:id/exports/:type
+- name: get_mesh_export
+  maps_to: GET /v1/worlds/requests/:id/exports/:type
 notes:
-  - list_world_requests and get_world* only see worlds generated through the API/connector with your key; web-app (dashboard) worlds are not visible to the connector.
-  - Generation is ~5-10 minutes (Echo 2 - Standard); agents should poll get_world_status rather than block.
-  - Panorama edits are synchronous and return a pano_... artifact; downloads return short-lived (~5 min) signed URLs.
+- list_world_requests and get_world* only see worlds generated through the API/connector with your key;
+  web-app (dashboard) worlds are not visible to the connector.
+- Generation is ~5-10 minutes (Echo 2 - Standard); agents should poll get_world_status rather than block.
+- Panorama edits are synchronous and return a pano_... artifact; downloads return short-lived (~5 min)
+  signed URLs.
+deployment:
+  mode: remote
+  endpoint: https://mcp.spaitial.ai/mcp
+  verified: probed
+  probe: gated
+  checked: '2026-08-12'
+  source: catalog MCP census

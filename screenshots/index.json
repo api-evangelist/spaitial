@@ -1,0 +1,19 @@
+[
+  {
+    "repo": "spaitial",
+    "captured_at": "2026-08-17T082011",
+    "source_url": "https://developers.spaitial.ai",
+    "source_type": "DeveloperPortal",
+    "file": "spaitial-2026-08-17T082011.png",
+    "bytes": 49035
+  },
+  {
+    "repo": "spaitial",
+    "captured_at": "2026-08-17T125348",
+    "source_url": "https://spaitial.ai",
+    "source_type": "root-domain",
+    "file": "spaitial-2026-08-17T125348.png",
+    "bytes": 1563578,
+    "capture": "playwright-local"
+  }
+]
