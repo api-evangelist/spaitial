@@ -49,6 +49,8 @@ apis:
   humanURL: https://docs.spaitial.ai/api/getting-started
   baseURL: https://api.spaitial.ai
   tags:
+  - File
+  tags_raw:
   - files
   properties:
   - type: OpenAPI
@@ -65,6 +67,8 @@ apis:
   humanURL: https://docs.spaitial.ai/api/getting-started
   baseURL: https://api.spaitial.ai
   tags:
+  - Models
+  tags_raw:
   - models
   properties:
   - type: OpenAPI
