@@ -132,6 +132,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Website
+  url: https://www.spaitial.ai/
 - type: Overlay
   url: overlays/spaitial-developer-api-overlay.yaml
 - type: AgenticAccess
