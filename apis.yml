@@ -59,7 +59,7 @@ tags:
 - MCP
 apis:
 - aid: spaitial:spaitial-files-api
-  name: SpAItial files API
+  name: SpAItial Files API
   description: File upload endpoints
   humanURL: https://docs.spaitial.ai/api/getting-started
   baseURL: https://api.spaitial.ai
@@ -77,7 +77,7 @@ apis:
   - type: GettingStarted
     url: https://docs.spaitial.ai/api/getting-started
 - aid: spaitial:spaitial-models-api
-  name: SpAItial models API
+  name: SpAItial Models API
   description: Model discovery endpoints
   humanURL: https://docs.spaitial.ai/api/getting-started
   baseURL: https://api.spaitial.ai
@@ -95,7 +95,7 @@ apis:
   - type: GettingStarted
     url: https://docs.spaitial.ai/api/getting-started
 - aid: spaitial:spaitial-panoramas-api
-  name: SpAItial panoramas API
+  name: SpAItial Panoramas API
   description: The panoramas API from SpAItial — 4 operation(s) for panoramas.
   humanURL: https://docs.spaitial.ai/api/getting-started
   baseURL: https://api.spaitial.ai
@@ -111,7 +111,7 @@ apis:
   - type: GettingStarted
     url: https://docs.spaitial.ai/api/getting-started
 - aid: spaitial:spaitial-worlds-api
-  name: SpAItial worlds API
+  name: SpAItial Worlds API
   description: World generation endpoints
   humanURL: https://docs.spaitial.ai/api/getting-started
   baseURL: https://api.spaitial.ai
