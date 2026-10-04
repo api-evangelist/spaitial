@@ -116,6 +116,8 @@ apis:
   humanURL: https://docs.spaitial.ai/api/getting-started
   baseURL: https://api.spaitial.ai
   tags:
+  - Worlds
+  tags_raw:
   - worlds
   properties:
   - type: OpenAPI
