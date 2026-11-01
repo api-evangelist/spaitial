@@ -64,15 +64,143 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-SpAItial (SpAItial Ltd, London) is a frontier spatial-AI lab building **Echo**, a world-model family that turns text prompts, images, and 360-degree panoramas into persistent, explorable **3D Gaussian Splat** worlds (SPZ/SOG, plus mesh exports).
+SpAItial (SpAItial Ltd, London) is a frontier spatial-AI lab building Echo, a world-model family that turns text prompts, images, and 360-degree panoramas into persistent, explorable 3D Gaussian Splat worlds (SPZ/SOG, plus mesh exports). SpAItial ships a public REST Developer API at api.spaitial.ai for programmatic world generation, panorama editing, file upload, and mesh export, an official hosted Model Context Protocol (MCP) server for AI agents, and an installable Agent Skill for coding assistants. It is a portfolio company of Speedinvest. This profile was enriched from the live OpenAPI spec, docs, llms.txt, and MCP server card.
 
-This API Evangelist profile captures SpAItial's developer surface:
+**Areas:** Company · Spatial AI · World Models · 3D · Gaussian Splatting · Generative AI · Developer API · MCP
 
-- **Developer REST API** — `https://api.spaitial.ai/v1` (OpenAPI at `openapi/`)
-- **Hosted MCP server** — `https://mcp.spaitial.ai/mcp` (15 tools, BYOK) — see `mcp/`
-- **Docs** — https://docs.spaitial.ai/api/getting-started
-- **Developer portal** — https://developers.spaitial.ai
+## SpAItial on APIs.io
 
-Backed by: Speedinvest.
+Everything profiled for SpAItial is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/spaitial/](https://apis.io/providers/spaitial/)** — or go straight to one of the APIs or properties below.
 
-Enriched via the API Evangelist enrichment pipeline (local-v1, 2026-07-21).
+### APIs (4)
+
+- [SpAItial Files API](https://apis.io/apis/spaitial/spaitial-files-api/) — File upload endpoints
+- [SpAItial Models API](https://apis.io/apis/spaitial/spaitial-models-api/) — Model discovery endpoints
+- [SpAItial Panoramas API](https://apis.io/apis/spaitial/spaitial-panoramas-api/) — The panoramas API from SpAItial — 4 operation(s) for panoramas.
+- [SpAItial Worlds API](https://apis.io/apis/spaitial/spaitial-worlds-api/) — World generation endpoints
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [SpAItial Developer API Webhooks](https://apis.io/asyncapis/spaitial/spaitial-webhooks-asyncapi/)
+
+#### Event channels (1)
+
+Individual events and webhooks the provider emits.
+
+- [/](https://apis.io/channels/spaitial/webhook/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [SpAItial MCP Server](https://apis.io/servers/spaitial/spaitial-mcp-server/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Spaitial Agentic Access](https://apis.io/agentic-access/spaitial/spaitial-agentic-access/)
+
+#### Collections (4)
+
+Postman and Open Collection request collections.
+
+- [SpAItial Developer files API](https://apis.io/collections/spaitial/open-spaitial-files-api/)
+- [SpAItial Developer files models API](https://apis.io/collections/spaitial/open-spaitial-models-api/)
+- [SpAItial Developer files panoramas API](https://apis.io/collections/spaitial/open-spaitial-panoramas-api/)
+- [SpAItial Developer files worlds API](https://apis.io/collections/spaitial/open-spaitial-worlds-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Spaitial Developer Api Overlay](https://apis.io/overlays/spaitial/spaitial-developer-api-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Spaitial Authentication](https://apis.io/security/spaitial/spaitial-authentication/)
+- [Spaitial Domain Security](https://apis.io/security/spaitial/spaitial-domain-security/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Spaitial Scopes](https://apis.io/scopes/spaitial/spaitial-scopes/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.spaitial.ai/)
+- [Documentation](https://docs.spaitial.ai)
+- [Getting started](https://docs.spaitial.ai/api/getting-started)
+- [API reference](https://docs.spaitial.ai/api/reference/spaitial-developer-api)
+- [Pricing](https://docs.spaitial.ai/api/credits-billing)
+- [Sign up](https://developers.spaitial.ai)
+- [Blog](https://spaitial.ai/blog)
+- [Terms of service](https://spaitial.ai/terms)
+- [Privacy policy](https://spaitial.ai/privacy)
+- [GitHub](https://github.com/spaitial-ai)
+
+## API Evangelist rating
+
+**Kin Score 47.3** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 50.3 |
+| Contract governance | 4.5 |
+| Operational transparency | 31.6 |
+| Developer ergonomics | 61.3 |
+| Access clarity | 44.7 |
+
+**Agent readiness 58.6** — agent-native
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | verified |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | — |
+| Event Surface Described | derived (partial credit) |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 31.8** — AI & Biometrics
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/spaitial/](https://apis.io/providers/spaitial/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for SpAItial: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/spaitial/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
